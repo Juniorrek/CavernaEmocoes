@@ -15,7 +15,7 @@ public class mov_1 : MonoBehaviour {
 		puloDuplo = false;
 		noChao = false;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		Collider[] colisao;
@@ -30,7 +30,7 @@ public class mov_1 : MonoBehaviour {
 		else{
 			velMax = velocidadeMax;
 		}
-				
+
 		if (velocidade > velMax)
 			velocidade -= 1.0f;
 
@@ -43,15 +43,22 @@ public class mov_1 : MonoBehaviour {
 					velocidade += 0.1f;
 				}
 		}
-				
+
 		}
 		else{//e o personagem não para derrepente, ele desacelera
 			if (velocidade > 2)
 				velocidade -= 0.3f;
 		}
+		int col = 0;
+		colisao = Physics.OverlapSphere(new Vector3(transform.position.x + (Input.GetAxis("Horizontal") * 0.3f),transform.position.y,transform.position.z),0.3f);
 
+		for (int c = 0; c < colisao.Length; c++) {
+			if (colisao[c].gameObject.tag == "plataforma")
+				col++;
+		}
 
-		transform.Translate(Input.GetAxis("Horizontal") * Time.deltaTime * velocidade, 0f, 0f);
+		if (col == 0)
+			transform.Translate(Input.GetAxis("Horizontal") * Time.deltaTime * velocidade, 0f, 0f);
 
 
 
@@ -72,15 +79,15 @@ public class mov_1 : MonoBehaviour {
 
 		//pulo
 		if(Input.GetButtonDown("Jump")) {
-			
+
 			if (noChao){
-				
+
 				rb.velocity = new Vector3(0,clamp(velocidade*1.6f,9f,11f),0);
 				noChao = false;
 
 			}
 			else if (puloDuplo == true){
-				
+
 				puloDuplo = false;
 				rb.velocity = new Vector3(0,clamp(velocidade*1.6f,9f,9f),0);
 			}
